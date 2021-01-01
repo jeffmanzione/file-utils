@@ -23,7 +23,7 @@ SFILE *sfile_open(const char *source) {
 
 void sfile_close(SFILE *file) { DEALLOC(file); }
 
-char *sgets(char *str, int num, SFILE *stream) {
+char *sfile_gets(char *str, int num, SFILE *stream) {
   if (NULL == stream || NULL == stream->str || NULL == str || num <= 0 ||
       '\0' == *stream->pos) {
     return NULL;
