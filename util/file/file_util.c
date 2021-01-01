@@ -38,15 +38,7 @@ FILE *file_fn(const char fn[], const char op_type[], int line_num,
   return file;
 }
 
-void file_op(FILE *file, FileHandler operation, int line_num,
-             const char func_name[], const char file_name[]) {
-  operation(file);
-  if (0 != fclose(file)) {
-    __error(line_num, func_name, file_name, "File operation failed.");
-  }
-}
-
-void make_dir_if_does_not_exist(const char path[]) {
+bool make_dir_if_does_not_exist(const char path[]) {
   ASSERT(NOT_NULL(path));
   struct stat st = {0};
   if (stat(path, &st) == -1) {
@@ -55,20 +47,22 @@ void make_dir_if_does_not_exist(const char path[]) {
 #else
     mkdir(path, 0700);
 #endif
+    return true;
   }
+  return false;
 }
 
-void split_path_file(const char path_file[], char **path, char **file_name,
+void split_path_file(const char full_path[], char **dir_path, char **file_name,
                      char **ext) {
-  char *slash = (char *)path_file, *next;
+  char *slash = (char *)full_path, *next;
   while ((next = strpbrk(slash + 1, "\\/")))
     slash = next;
-  if (path_file != slash)
+  if (full_path != slash)
     slash++;
-  int path_len = slash - path_file;
-  *path = intern_range(path_file, 0, path_len);
+  int path_len = slash - full_path;
+  *dir_path = intern_range(full_path, 0, path_len);
   char *dot = (ext == NULL) ? NULL : strchr(slash + 1, '.');
-  int filename_len = (dot == NULL) ? strlen(path_file) - path_len : dot - slash;
+  int filename_len = (dot == NULL) ? strlen(full_path) - path_len : dot - slash;
   *file_name = intern_range(slash, 0, filename_len);
   if (dot != NULL) {
     *ext = intern(dot);

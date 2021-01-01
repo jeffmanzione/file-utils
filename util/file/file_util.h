@@ -13,28 +13,47 @@
 #define ssize_t int
 #endif
 
+// Opens a [file] with the specified [op_type], handling potential issues with
+// opening the file.
+//
+// Usage:
+//   FILE *file = FILE_FN("myfile.txt", "r");
 #define FILE_FN(fn, op_type) file_fn(fn, op_type, __LINE__, __func__, __FILE__)
-#define FILE_OP(file, operation)                                               \
-  file_op(file, ({ void __fn__ operation __fn__; }), __LINE__, __func__,       \
-          __FILE__)
-#define FILE_OP_FN(fn, op_type, operation)                                     \
-  FILE_OP(FILE_FN(fn, op_type), operation)
-
-typedef void (*FileHandler)(FILE *);
-
 FILE *file_fn(const char fn[], const char op_type[], int line_num,
               const char func_name[], const char file_name[]);
-void file_op(FILE *file, FileHandler operation, int line_num,
-             const char func_name[], const char file_name[]);
 
-char *find_file_by_name(const char dir[], const char file_prefix[]);
-void make_dir_if_does_not_exist(const char path[]);
+// Creates a directory at [path] if it does not exist, otherwise it has no
+// effect.
+//
+// Returns true if the directory was created by this function, otherwise false.
+bool make_dir_if_does_not_exist(const char path[]);
 
-void split_path_file(const char path_file[], char **path, char **file_name,
+// Splits [full_path] into the directory path, file name, and extension.
+//
+// Usage:
+//   char *dir_path, *file_name, *ext;
+//   split_path_file("/path/to/my/file.ext", &dir_path, &file_name, &ext);
+//   printf("%s", dir_path);  // "path/to/my"
+//   printf("%s", file_name);  // "file"
+//   printf("%s", ext);  // ".ext"
+void split_path_file(const char full_path[], char **dir_path, char **file_name,
                      char **ext);
+
+// Combines the provided [path], [file_name], and [ext] into a valid full path.
+//
+// Usage:
+//   char *full_path = combine_path_file("path/to", "file", ".txt");
+//   printf("%s", full_path);  // "path/to/file.txt"
+//   full_path = combine_path_file("path/to", "file", NULL);
+//   printf("%s", full_path);  // "path/to/file"
+//   full_path = combine_path_file("path/to/", "file", NULL);
+//   printf("%s", full_path);  // "path/to/file"
 char *combine_path_file(const char path[], const char file_name[],
                         const char ext[]);
 
+// Reads an entire line from stream, storing the address of the buffer
+// containing the text into *lineptr.  The buffer is null-terminated and
+// includes the newline character, if one was found.
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 
 #endif /* UTIL_FILE_FILE_UTIL_H_ */

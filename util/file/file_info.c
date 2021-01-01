@@ -75,11 +75,6 @@ inline void file_info_close_file(FileInfo *fi) {
   fi->fp = NULL;
 }
 
-inline FILE *file_info_fp(FileInfo *fi) {
-  ASSERT(NOT_NULL(fi));
-  return fi->fp;
-}
-
 void file_info_delete(FileInfo *fi) {
   ASSERT_NOT_NULL(fi);
   ASSERT_NOT_NULL(fi->lines);

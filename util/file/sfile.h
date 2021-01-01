@@ -28,7 +28,7 @@ void sfile_close(SFILE *);
 // stream: Pointer to an array of chars where the string read is copied.
 // num: Maximum number of characters to be copied into str (including the
 // terminating null-character). src: The source string from which to read.
-
+//
 // On success, the function returns str.
 char *sfile_gets(char *str, int num, SFILE *stream);
 
