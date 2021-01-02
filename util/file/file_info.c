@@ -87,6 +87,10 @@ void file_info_delete(FileInfo *fi) {
   DEALLOC(fi);
 }
 
+void file_info_reset_lines(FileInfo *fi, int32_t num_lines) {
+  fi->num_lines = num_lines;
+}
+
 char *_file_info_gets(FileInfo *fi, char *target, size_t num) {
   if (fi->fp != NULL) {
     return fgets(target, num, fi->fp);
@@ -98,10 +102,8 @@ char *_file_info_gets(FileInfo *fi, char *target, size_t num) {
   return NULL;
 }
 
-LineInfo *_file_info_append(FileInfo *fi, char line_text[]) {
-  int num_lines = fi->num_lines;
-  LineInfo *li = fi->lines[fi->num_lines++] =
-      line_info(fi, line_text, num_lines);
+LineInfo *_file_info_append_line(FileInfo *fi, LineInfo *li) {
+  fi->lines[fi->num_lines++] = li;
   if (fi->num_lines >= fi->array_len) {
     fi->array_len += DEFAULT_NUM_LINES;
     fi->lines = REALLOC(fi->lines, LineInfo *, fi->array_len);
@@ -109,12 +111,16 @@ LineInfo *_file_info_append(FileInfo *fi, char line_text[]) {
   return li;
 }
 
+LineInfo *_file_info_append_line_text(FileInfo *fi, char line_text[]) {
+  return _file_info_append_line(fi, line_info(fi, line_text, fi->num_lines));
+}
+
 LineInfo *file_info_getline(FileInfo *fi) {
   char line[MAX_LINE_LENGTH];
   if (NULL == _file_info_gets(fi, line, MAX_LINE_LENGTH)) {
     return NULL;
   }
-  return _file_info_append(fi, line);
+  return _file_info_append_line_text(fi, line);
 }
 
 inline const LineInfo *file_info_lookup(const FileInfo *fi, int line_num) {
@@ -127,3 +133,18 @@ inline const LineInfo *file_info_lookup(const FileInfo *fi, int line_num) {
 inline int file_info_len(const FileInfo *fi) { return fi->num_lines; }
 
 inline const char *file_info_name(const FileInfo *fi) { return fi->name; }
+
+void file_info_append(FileInfo *parent, FileInfo *child) {
+  int i;
+  for (i = 0; i < child->num_lines; ++i) {
+    LineInfo *li = child->lines[i];
+    li->line_num = parent->num_lines;
+    _file_info_append_line(parent, li);
+  }
+  file_info_close_file(parent);
+  parent->fp = child->fp;
+  parent->sfp = child->sfp;
+  DEALLOC(child->lines);
+  file_info_close_file(child);
+  DEALLOC(child);
+}

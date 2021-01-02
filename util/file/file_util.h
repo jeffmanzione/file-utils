@@ -6,6 +6,7 @@
 #ifndef UTIL_FILE_FILE_UTIL_H_
 #define UTIL_FILE_FILE_UTIL_H_
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <sys/types.h>
 

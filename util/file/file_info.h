@@ -49,4 +49,9 @@ void file_info_delete(FileInfo *fi);
 // Closes the underlying FILE if there is one.
 void file_info_close_file(FileInfo *fi);
 
+// Appends the contents of child to parent, destroying child in the process.
+//
+// If the parent has not fully consumed its stream, it is closed.
+void file_info_append(FileInfo *parent, FileInfo *child);
+
 #endif /* UTIL_FILE_FILE_INFO_H_ */
