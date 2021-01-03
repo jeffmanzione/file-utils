@@ -12,7 +12,6 @@
 #include <sys/stat.h>
 
 #include "alloc/alloc.h"
-#include "alloc/arena/intern.h"
 #include "debug/debug.h"
 #include "util/string.h"
 
@@ -60,12 +59,12 @@ void split_path_file(const char full_path[], char **dir_path, char **file_name,
   if (full_path != slash)
     slash++;
   int path_len = slash - full_path;
-  *dir_path = intern_range(full_path, 0, path_len);
+  *dir_path = ALLOC_STRNDUP(full_path, path_len);
   char *dot = (ext == NULL) ? NULL : strchr(slash + 1, '.');
   int filename_len = (dot == NULL) ? strlen(full_path) - path_len : dot - slash;
-  *file_name = intern_range(slash, 0, filename_len);
+  *file_name = ALLOC_STRNDUP(slash, filename_len);
   if (dot != NULL) {
-    *ext = intern(dot);
+    *ext = ALLOC_STRDUP(dot);
   } else if (ext != NULL) {
     *ext = NULL;
   }
@@ -86,7 +85,7 @@ char *combine_path_file(const char path[], const char file_name[],
   if (NULL != ext) {
     memmove(tmp + path_len + 1 + filename_len, ext, ext_len);
   }
-  char *result = intern_range(tmp, 0, full_len);
+  char *result = ALLOC_STRNDUP(tmp, full_len);
   DEALLOC(tmp);
   return result;
 }

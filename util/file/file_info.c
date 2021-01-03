@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 #include "alloc/alloc.h"
-#include "alloc/arena/intern.h"
 #include "debug/debug.h"
 
 #define DEFAULT_NUM_LINES 128
@@ -25,12 +24,15 @@ struct FileInfo_ {
 
 LineInfo *line_info(FileInfo *fi, char line_text[], int line_num) {
   LineInfo *li = ALLOC(LineInfo);
-  li->line_text = intern(line_text);
+  li->line_text = ALLOC_STRDUP(line_text);
   li->line_num = line_num;
   return li;
 }
 
-void _line_info_delete(LineInfo *li) { DEALLOC(li); }
+void _line_info_delete(LineInfo *li) {
+  DEALLOC(li->line_text);
+  DEALLOC(li);
+}
 
 FileInfo *file_info(const char fn[]) {
   FILE *file = FILE_FN(fn, "r");
@@ -41,7 +43,7 @@ FileInfo *file_info(const char fn[]) {
 
 inline void file_info_set_name(FileInfo *fi, const char fn[]) {
   ASSERT(NOT_NULL(fi), NOT_NULL(fn));
-  fi->name = intern(fn);
+  fi->name = ALLOC_STRDUP(fn);
 }
 
 FileInfo *file_info_file(FILE *file) {
@@ -78,6 +80,10 @@ inline void file_info_close_file(FileInfo *fi) {
 void file_info_delete(FileInfo *fi) {
   ASSERT_NOT_NULL(fi);
   ASSERT_NOT_NULL(fi->lines);
+  if (NULL != fi->name) {
+    DEALLOC(fi->name);
+    fi->name = NULL;
+  }
   int i;
   for (i = 0; i < fi->num_lines; i++) {
     _line_info_delete(fi->lines[i]);
@@ -145,6 +151,5 @@ void file_info_append(FileInfo *parent, FileInfo *child) {
   parent->fp = child->fp;
   parent->sfp = child->sfp;
   DEALLOC(child->lines);
-  file_info_close_file(child);
   DEALLOC(child);
 }

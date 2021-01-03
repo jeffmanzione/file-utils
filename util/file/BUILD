@@ -23,7 +23,6 @@ cc_library(
     deps = [
         "//util:string",
         "@memory_wrapper//alloc",
-        "@memory_wrapper//alloc/arena:intern",
         "@memory_wrapper//debug",
     ],
 )
