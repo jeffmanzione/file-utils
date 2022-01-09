@@ -104,7 +104,7 @@ char *_file_info_gets(FileInfo *fi, char *target, size_t num) {
   if (fi->sfp != NULL) {
     return sfile_gets(target, num, fi->sfp);
   }
-  ERROR("FileInfo missing FILE OR SFILE.");
+  FATALF("FileInfo missing FILE OR SFILE.");
   return NULL;
 }
 
