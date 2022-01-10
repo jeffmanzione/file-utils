@@ -41,7 +41,7 @@ FileInfo *file_info(const char fn[]) {
   return fi;
 }
 
-inline void file_info_set_name(FileInfo *fi, const char fn[]) {
+void file_info_set_name(FileInfo *fi, const char fn[]) {
   ASSERT(NOT_NULL(fi), NOT_NULL(fn));
   fi->name = ALLOC_STRDUP(fn);
 }
@@ -69,7 +69,7 @@ FileInfo *file_info_sfile(SFILE *file) {
   return fi;
 }
 
-inline void file_info_close_file(FileInfo *fi) {
+void file_info_close_file(FileInfo *fi) {
   if (NULL == fi->fp) {
     return;
   }
@@ -129,16 +129,16 @@ LineInfo *file_info_getline(FileInfo *fi) {
   return _file_info_append_line_text(fi, line);
 }
 
-inline const LineInfo *file_info_lookup(const FileInfo *fi, int line_num) {
+const LineInfo *file_info_lookup(const FileInfo *fi, int line_num) {
   if (line_num < 1 || line_num > fi->num_lines) {
     return NULL;
   }
   return fi->lines[line_num - 1];
 }
 
-inline int file_info_len(const FileInfo *fi) { return fi->num_lines; }
+int file_info_len(const FileInfo *fi) { return fi->num_lines; }
 
-inline const char *file_info_name(const FileInfo *fi) { return fi->name; }
+const char *file_info_name(const FileInfo *fi) { return fi->name; }
 
 void file_info_append(FileInfo *parent, FileInfo *child) {
   int i;
