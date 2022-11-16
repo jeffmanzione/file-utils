@@ -57,4 +57,9 @@ char *combine_path_file(const char path[], const char file_name[],
 // includes the newline character, if one was found.
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 
+// Reads the entire content of a file and returns sets *target to it.
+// Allocates memory that must be freed. Returns the total length of the
+// allocated string.
+ssize_t getall(FILE *f, char **target);
+
 #endif /* UTIL_FILE_FILE_UTIL_H_ */

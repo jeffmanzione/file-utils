@@ -144,3 +144,15 @@ ssize_t getline(char **lineptr, size_t *n, FILE *stream) {
 
   return p - bufptr - 1;
 }
+
+ssize_t getall(FILE *f, char **target) {
+  fseek(f, 0, SEEK_END);
+  long fsize = ftell(f);
+  fseek(f, 0, SEEK_SET);
+  char *string = ALLOC_ARRAY2(char, fsize + 1);
+  fread(string, fsize, 1, f);
+  fclose(f);
+  string[fsize] = '\0';
+  *target = string;
+  return fsize + 1;
+}
