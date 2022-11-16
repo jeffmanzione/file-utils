@@ -13,12 +13,14 @@
 
 #include "alloc/alloc.h"
 #include "debug/debug.h"
+#include "util/platform.h"
 #include "util/string.h"
 
-#ifdef _WIN32
-#define SLASH_CHAR '\\';
+#ifdef OS_WINDOWS
+#define SLASH_CHAR '\\'
 #else
-#define SLASH_CHAR '/';
+#define SLASH_CHAR '/'
+#include <unistd.h>
 #endif
 
 FILE *file_fn(const char fn[], const char op_type[], int line_num,
@@ -155,4 +157,15 @@ ssize_t getall(FILE *f, char **target) {
   string[fsize] = '\0';
   *target = string;
   return fsize + 1;
+}
+
+FILE *file_from_string(const char string[]) {
+  FILE *tmp = tmpfile();
+  if (NULL == tmp) {
+    FATAL("Unable to create temp file.");
+    return NULL;
+  }
+  fprintf(tmp, "%s", string);
+  rewind(tmp);
+  return tmp;
 }

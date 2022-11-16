@@ -62,4 +62,8 @@ ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 // allocated string.
 ssize_t getall(FILE *f, char **target);
 
+// Returns a FILE which reads the given [string].
+// Creates a temporary file in the process.
+FILE *file_from_string(const char string[]);
+
 #endif /* UTIL_FILE_FILE_UTIL_H_ */
