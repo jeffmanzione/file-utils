@@ -13,10 +13,9 @@
 
 #include "alloc/alloc.h"
 #include "debug/debug.h"
-#include "util/platform.h"
 #include "util/string.h"
 
-#ifdef OS_WINDOWS
+#if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 #define SLASH_CHAR '\\'
 #else
 #define SLASH_CHAR '/'
