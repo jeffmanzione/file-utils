@@ -161,7 +161,7 @@ ssize_t getall(FILE *f, char **target) {
 FILE *file_from_string(const char string[]) {
   FILE *tmp = tmpfile();
   if (NULL == tmp) {
-    FATAL("Unable to create temp file.");
+    FATALF("Unable to create temp file.");
     return NULL;
   }
   fprintf(tmp, "%s", string);
