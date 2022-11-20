@@ -151,7 +151,16 @@ ssize_t getall(FILE *f, char **target) {
   long fsize = ftell(f);
   fseek(f, 0, SEEK_SET);
   char *string = ALLOC_ARRAY2(char, fsize + 1);
+
+#ifndef _WIN32
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
   fread(string, fsize, 1, f);
+#ifndef _WIN32
+#pragma GCC diagnostic pop
+#endif
+
   fclose(f);
   string[fsize] = '\0';
   *target = string;
