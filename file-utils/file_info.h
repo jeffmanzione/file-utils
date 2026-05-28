@@ -6,6 +6,10 @@
 #ifndef COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_INFO_H_
 #define COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_INFO_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 
 #include "file-utils/file_utils.h"
@@ -53,5 +57,9 @@ void file_info_close_file(FileInfo *fi);
 //
 // If the parent has not fully consumed its stream, it is closed.
 void file_info_append(FileInfo *parent, FileInfo *child);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_INFO_H_ */

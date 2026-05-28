@@ -6,6 +6,10 @@
 #ifndef COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_UTILS_H_
 #define COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_UTILS_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,5 +70,9 @@ ssize_t getall(FILE *f, char **target);
 // Returns a FILE which reads the given [string].
 // Creates a temporary file in the process.
 FILE *file_from_string(const char string[]);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_UTILS_H_ */

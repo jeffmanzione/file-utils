@@ -6,6 +6,10 @@
 #ifndef COM_GITHUB_JEFFMANZIONE_FILE_UTILS_SFILE_H_
 #define COM_GITHUB_JEFFMANZIONE_FILE_UTILS_SFILE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Cross-platform solution for treating strings like FILEs.
 typedef struct _SFILE SFILE;
 
@@ -31,5 +35,9 @@ void sfile_close(SFILE *);
 //
 // On success, the function returns str.
 char *sfile_gets(char *str, int num, SFILE *stream);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* COM_GITHUB_JEFFMANZIONE_FILE_UTILS_SFILE_H_ */
