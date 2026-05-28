@@ -3,12 +3,10 @@
 // Created on: Jan 6, 2016
 //     Author: Jeff Manzione
 
-#include "util/file/file_info.h"
+#include "file-utils/file_info.h"
 
 #include <stdio.h>
-
-#include "alloc/alloc.h"
-#include "debug/debug.h"
+#include <string.h>
 
 #define DEFAULT_NUM_LINES 128
 #define MAX_LINE_LENGTH 512
@@ -23,15 +21,15 @@ struct FileInfo_ {
 };
 
 LineInfo *line_info(FileInfo *fi, char line_text[], int line_num) {
-  LineInfo *li = ALLOC(LineInfo);
-  li->line_text = ALLOC_STRDUP(line_text);
+  LineInfo *li = calloc(sizeof(LineInfo), 1);
+  li->line_text = strdup(line_text);
   li->line_num = line_num;
   return li;
 }
 
 void _line_info_delete(LineInfo *li) {
-  DEALLOC(li->line_text);
-  DEALLOC(li);
+  free(li->line_text);
+  free(li);
 }
 
 FileInfo *file_info(const char fn[]) {
@@ -42,30 +40,28 @@ FileInfo *file_info(const char fn[]) {
 }
 
 void file_info_set_name(FileInfo *fi, const char fn[]) {
-  ASSERT(NOT_NULL(fi), NOT_NULL(fn));
-  fi->name = ALLOC_STRDUP(fn);
+  fi->name = strdup(fn);
 }
 
 FileInfo *file_info_file(FILE *file) {
-  FileInfo *fi = ALLOC(FileInfo);
+  FileInfo *fi = calloc(sizeof(FileInfo), 1);
   fi->name = NULL;
   fi->fp = file;
   fi->sfp = NULL;
-  ASSERT_NOT_NULL(fi->fp);
   fi->num_lines = 0;
   fi->array_len = DEFAULT_NUM_LINES;
-  fi->lines = ALLOC_ARRAY(LineInfo *, fi->array_len);
+  fi->lines = malloc(sizeof(LineInfo *) * fi->array_len);
   return fi;
 }
 
 FileInfo *file_info_sfile(SFILE *file) {
-  FileInfo *fi = ALLOC(FileInfo);
+  FileInfo *fi = malloc(sizeof(FileInfo));
   fi->name = NULL;
   fi->fp = NULL;
   fi->sfp = file;
   fi->num_lines = 0;
   fi->array_len = DEFAULT_NUM_LINES;
-  fi->lines = ALLOC_ARRAY(LineInfo *, fi->array_len);
+  fi->lines = malloc(sizeof(LineInfo *) * fi->array_len);
   return fi;
 }
 
@@ -78,19 +74,17 @@ void file_info_close_file(FileInfo *fi) {
 }
 
 void file_info_delete(FileInfo *fi) {
-  ASSERT_NOT_NULL(fi);
-  ASSERT_NOT_NULL(fi->lines);
   if (NULL != fi->name) {
-    DEALLOC(fi->name);
+    free(fi->name);
     fi->name = NULL;
   }
   int i;
   for (i = 0; i < fi->num_lines; i++) {
     _line_info_delete(fi->lines[i]);
   }
-  DEALLOC(fi->lines);
+  free(fi->lines);
   file_info_close_file(fi);
-  DEALLOC(fi);
+  free(fi);
 }
 
 void file_info_reset_lines(FileInfo *fi, int32_t num_lines) {
@@ -104,7 +98,8 @@ char *_file_info_gets(FileInfo *fi, char *target, size_t num) {
   if (fi->sfp != NULL) {
     return sfile_gets(target, num, fi->sfp);
   }
-  FATALF("FileInfo missing FILE OR SFILE.");
+  perror("FileInfo missing FILE OR SFILE.");
+  exit(1);
   return NULL;
 }
 
@@ -112,7 +107,7 @@ LineInfo *_file_info_append_line(FileInfo *fi, LineInfo *li) {
   fi->lines[fi->num_lines++] = li;
   if (fi->num_lines >= fi->array_len) {
     fi->array_len += DEFAULT_NUM_LINES;
-    fi->lines = REALLOC(fi->lines, LineInfo *, fi->array_len);
+    fi->lines = realloc(fi->lines, sizeof(LineInfo *) * fi->array_len);
   }
   return li;
 }
@@ -150,6 +145,6 @@ void file_info_append(FileInfo *parent, FileInfo *child) {
   file_info_close_file(parent);
   parent->fp = child->fp;
   parent->sfp = child->sfp;
-  DEALLOC(child->lines);
-  DEALLOC(child);
+  free(child->lines);
+  free(child);
 }

@@ -3,8 +3,8 @@
 // Created on: Jun 6, 2020
 //     Author: Jeff Manzione
 
-#ifndef UTIL_STRING_H_
-#define UTIL_STRING_H_
+#ifndef COM_GITHUB_JEFFMANZIONE_FILE_UTILS_STRING_H_
+#define COM_GITHUB_JEFFMANZIONE_FILE_UTILS_STRING_H_
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -38,4 +38,4 @@ bool contains_char(const char str[], char c);
 char *find_str(char *haystack, size_t haystack_len, const char *needle,
                size_t needle_len);
 
-#endif /* UTIL_STRING_H_ */
+#endif /* COM_GITHUB_JEFFMANZIONE_FILE_UTILS_STRING_H_ */

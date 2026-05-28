@@ -5,25 +5,27 @@ package(
 )
 
 cc_library(
+    name = "string_utils",
+    srcs = ["string_utils.c"],
+    hdrs = ["string_utils.h"],
+)
+
+cc_library(
     name = "file_info",
     srcs = ["file_info.c"],
     hdrs = ["file_info.h"],
     deps = [
-        ":file_util",
+        ":file_utils",
         ":sfile",
-        "@memory_wrapper//alloc",
-        "@memory_wrapper//debug",
     ],
 )
 
 cc_library(
-    name = "file_util",
-    srcs = ["file_util.c"],
-    hdrs = ["file_util.h"],
+    name = "file_utils",
+    srcs = ["file_utils.c"],
+    hdrs = ["file_utils.h"],
     deps = [
-        "//util:string",
-        "@memory_wrapper//alloc",
-        "@memory_wrapper//debug",
+        "//file-utils:string_utils",
     ],
 )
 
@@ -31,7 +33,4 @@ cc_library(
     name = "sfile",
     srcs = ["sfile.c"],
     hdrs = ["sfile.h"],
-    deps = [
-        "@memory_wrapper//alloc",
-    ],
 )

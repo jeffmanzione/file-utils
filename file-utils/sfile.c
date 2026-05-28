@@ -3,11 +3,10 @@
 // Created on: Jan 1, 2021
 //     Author: Jeff Manzione
 
-#include "util/file/sfile.h"
+#include "file-utils/sfile.h"
 
+#include <stdlib.h>
 #include <string.h>
-
-#include "alloc/alloc.h"
 
 struct _SFILE {
   const char *str;
@@ -15,13 +14,13 @@ struct _SFILE {
 };
 
 SFILE *sfile_open(const char *source) {
-  SFILE *file = ALLOC2(SFILE);
+  SFILE *file = calloc(1, sizeof(SFILE));
   file->str = source;
   file->pos = source;
   return file;
 }
 
-void sfile_close(SFILE *file) { DEALLOC(file); }
+void sfile_close(SFILE *file) { free(file); }
 
 char *sfile_gets(char *str, int num, SFILE *stream) {
   if (NULL == stream || NULL == stream->str || NULL == str || num <= 0 ||

@@ -3,11 +3,12 @@
 // Created on: Jun 6, 2020
 //     Author: Jeff Manzione
 
-#ifndef UTIL_FILE_FILE_UTIL_H_
-#define UTIL_FILE_FILE_UTIL_H_
+#ifndef COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_UTILS_H_
+#define COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_UTILS_H_
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 
 #ifdef _WIN32
@@ -66,4 +67,4 @@ ssize_t getall(FILE *f, char **target);
 // Creates a temporary file in the process.
 FILE *file_from_string(const char string[]);
 
-#endif /* UTIL_FILE_FILE_UTIL_H_ */
+#endif /* COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_UTILS_H_ */

@@ -3,7 +3,7 @@
 // Created on: Jun 6, 2020
 //     Author: Jeff Manzione
 
-#include "util/string.h"
+#include "file-utils/string_utils.h"
 
 #include <stdbool.h>
 #include <stddef.h>

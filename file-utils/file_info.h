@@ -3,13 +3,13 @@
 // Created on: Jan 6, 2016
 //     Author: Jeff Manzione
 
-#ifndef UTIL_FILE_FILE_INFO_H_
-#define UTIL_FILE_FILE_INFO_H_
+#ifndef COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_INFO_H_
+#define COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_INFO_H_
 
 #include <stdio.h>
 
-#include "util/file/file_util.h"
-#include "util/file/sfile.h"
+#include "file-utils/file_utils.h"
+#include "file-utils/sfile.h"
 
 // Represents a line from a file.
 typedef struct LineInfo_ {
@@ -54,4 +54,4 @@ void file_info_close_file(FileInfo *fi);
 // If the parent has not fully consumed its stream, it is closed.
 void file_info_append(FileInfo *parent, FileInfo *child);
 
-#endif /* UTIL_FILE_FILE_INFO_H_ */
+#endif /* COM_GITHUB_JEFFMANZIONE_FILE_UTILS_FILE_INFO_H_ */
