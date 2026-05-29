@@ -54,4 +54,4 @@ dkms.conf
 # Bazel
 bazel*
 
-jeffmanzione_file-utils*
+jeffmanzione_file_utils*
