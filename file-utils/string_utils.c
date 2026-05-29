@@ -34,6 +34,7 @@ bool starts_with(const char *str, const char *prefix) {
 }
 
 bool contains_char(const char str[], char c) {
+  if (str == NULL) return false;
   int i;
   for (i = 0; i < strlen(str); i++) {
     if (c == str[i]) {
@@ -43,7 +44,7 @@ bool contains_char(const char str[], char c) {
   return false;
 }
 
-char *find_str(char *haystack, size_t haystack_len, const char *needle,
+char *find_str(const char *haystack, size_t haystack_len, const char *needle,
                size_t needle_len) {
   int i, j;
   for (i = 0; i <= (haystack_len - needle_len); ++i) {
@@ -51,7 +52,7 @@ char *find_str(char *haystack, size_t haystack_len, const char *needle,
       if (haystack[i + j] != needle[j]) {
         break;
       } else if (j == (needle_len - 1)) {
-        return haystack + i;
+        return ((char *)haystack) + i;
       }
     }
   }

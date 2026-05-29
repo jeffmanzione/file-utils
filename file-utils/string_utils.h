@@ -39,7 +39,7 @@ bool contains_char(const char str[], char c);
 // function can be used like this:
 //
 // char *pos = find_str(haystack, strlen(haystack), needle, strlen(needle));
-char *find_str(char *haystack, size_t haystack_len, const char *needle,
+char *find_str(const char *haystack, size_t haystack_len, const char *needle,
                size_t needle_len);
 
 #ifdef __cplusplus
