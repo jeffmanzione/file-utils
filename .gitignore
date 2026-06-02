@@ -53,5 +53,5 @@ dkms.conf
 
 # Bazel
 bazel*
-
-jeffmanzione_file-utils*
+MODULE.bazel.lock
+jeffmanzione_file_utils-*
